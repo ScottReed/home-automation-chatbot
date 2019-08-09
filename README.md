@@ -8,6 +8,7 @@
 - Implement authentication
 - Implement download searching
 - Implement Azure Key Vault
+- Implement Application Insights Logging
 
 ## Possible Future Ideas
 
