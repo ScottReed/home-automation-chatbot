@@ -4,7 +4,7 @@
 ## Project Goals
 
 - Learning more about Chatbots
-- Implement sequential flow
+- ~~Implement sequential flow~~
 - Implement authentication
 - Implement download searching
 - Implement Azure Key Vault

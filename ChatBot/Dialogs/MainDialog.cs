@@ -1,8 +1,10 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using ChatBot.Business.Main.Models;
+using ChatBot.Extensions;
 using ChatBot.Helpers;
 using ChatBot.Properties;
+using ChatBot.State;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Choices;
@@ -16,7 +18,7 @@ namespace ChatBot.Dialogs
     /// Implements the <see cref="ComponentDialog" />
     /// </summary>
     /// <seealso cref="ComponentDialog" />
-    public class MainDialog : ComponentDialog
+    public class MainDialog : CustomComponentDialog
     {
         protected readonly IConfiguration Configuration;
         protected readonly ILogger Logger;
@@ -28,17 +30,20 @@ namespace ChatBot.Dialogs
         /// <param name="configuration">The configuration.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="activityHelpers">The activity helpers.</param>
-        public MainDialog(IConfiguration configuration, ILogger<MainDialog> logger, HelperService activityHelpers) : base(nameof(MainDialog))
+        /// <param name="accessors">The accessors.</param>
+        public MainDialog(IConfiguration configuration, ILogger<MainDialog> logger, HelperService activityHelpers, MultiTurnPromptsBotAccessors accessors) : base(nameof(MainDialog), accessors)
         {
             Configuration = configuration;
             Logger = logger;
             ActivityHelpers = activityHelpers;
 
             AddDialog(new TextPrompt(nameof(TextPrompt)));
+            AddDialog(new ChoicePrompt(nameof(ChoicePrompt)));
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
                 RunInitialStepAsync,
-                HandleInitialStepAsnc
+                HandleInitialStepAsnc,
+                HandleSecondStepAsync
             }));
 
             // The initial child Dialog to run.
@@ -53,14 +58,7 @@ namespace ChatBot.Dialogs
         /// <returns>Task&lt;DialogTurnResult&gt;.</returns>
         private async Task<DialogTurnResult> RunInitialStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            var activity = ActivityHelpers.CreateSimpleImMultiChoice<InitialOptions>(Resources.MainDialog_InitalStep_Message);
-            await stepContext.PromptAsync()
-
-                ChoiceFactory.
-
-
-            await stepContext.Context.SendActivityAsync(activity, cancellationToken);
-            return await stepContext.NextAsync(null, cancellationToken);
+            return await stepContext.PromptAsync(nameof(ChoicePrompt), ActivityHelpers.GetChoicesFromEnum<InitialOptions>(Resources.MainDialog_InitalStep_Message, null), cancellationToken);
         }
 
         /// <summary>
@@ -71,7 +69,21 @@ namespace ChatBot.Dialogs
         /// <returns>Task&lt;DialogTurnResult&gt;.</returns>
         private async Task<DialogTurnResult> HandleInitialStepAsnc(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
+            // Get the current profile object from user state.
+            var userProfile = await Accessors.UserProfile.GetAsync(stepContext.Context, () => new UserProfile(), cancellationToken);
+
+            var initialOption = stepContext.GetEnumValueFromChoice<InitialOptions>();
+            userProfile.MainAction = initialOption;
+
             return await stepContext.PromptAsync(nameof(TextPrompt), new PromptOptions { Prompt = MessageFactory.Text("What can I help you with today?\nSay something like \"Book a flight from Paris to Berlin on March 22, 2020\"") }, cancellationToken);
+        }
+
+        private async Task<DialogTurnResult> HandleSecondStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        {
+            // Get the current profile object from user state.
+            var userProfile = await Accessors.UserProfile.GetAsync(stepContext.Context, () => new UserProfile(), cancellationToken);
+
+            return await stepContext.PromptAsync(nameof(TextPrompt), new PromptOptions { Prompt = MessageFactory.Text("test") }, cancellationToken);
         }
     }
 }

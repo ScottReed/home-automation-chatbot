@@ -51,7 +51,13 @@ namespace ChatBot.Helpers
             return dictionary;
         }
 
-
+        /// <summary>
+        /// Gets the choices from enum.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="question">The question.</param>
+        /// <param name="retry">The retry.</param>
+        /// <returns>PromptOptions.</returns>
         public PromptOptions GetChoicesFromEnum<T>(string question, string retry) where T : Enum
         {
             var enumDictionary = GetDescriptionValueArray<T>();
@@ -59,11 +65,21 @@ namespace ChatBot.Helpers
             return new PromptOptions()
             {
                 Prompt = MessageFactory.Text(question),
-                Choices = enumDictionary.Select(val => new Choice {}  new CardAction {Title = val.Value, Type = ActionTypes.ImBack, Value = val.Key})
+                Choices = enumDictionary.Select(val =>
+                    new Choice
+                    {
+                        Value  = val.Key,
+                        Action = 
+                            new CardAction
+                            {
+                                Title = val.Value,
+                                Type = ActionTypes.PostBack,
+                                Value = val.Key
+                            },
+                        Synonyms = null
+                    }).ToList(),
                 RetryPrompt = MessageFactory.Text(retry)
             };
-
-            ChoiceFactory
         }
     }
 }
