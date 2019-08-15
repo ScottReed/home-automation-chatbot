@@ -1,0 +1,103 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2F26D8C992E7B84ABE50AB55DC3D7853/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2F26D8C992E7B84ABE50AB55DC3D7853/Description/@EntryValue">Adds an async bot step</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2F26D8C992E7B84ABE50AB55DC3D7853/Field/=end/@KeyIndexDefined">True</s:Boolean>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2F26D8C992E7B84ABE50AB55DC3D7853/Field/=end/Order/@EntryValue">1</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2F26D8C992E7B84ABE50AB55DC3D7853/Field/=name/@KeyIndexDefined">True</s:Boolean>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2F26D8C992E7B84ABE50AB55DC3D7853/Field/=name/Order/@EntryValue">0</s:Int64>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2F26D8C992E7B84ABE50AB55DC3D7853/Shortcut/@EntryValue">botstep</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2F26D8C992E7B84ABE50AB55DC3D7853/Text/@EntryValue">        private async Task&lt;DialogTurnResult&gt; $name$(WaterfallStepContext stepContext, CancellationToken cancellationToken)&#xD;
+        {&#xD;
+            return await $end$;&#xD;
+        }</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2F26D8C992E7B84ABE50AB55DC3D7853/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2F26D8C992E7B84ABE50AB55DC3D7853/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2F26D8C992E7B84ABE50AB55DC3D7853/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2F26D8C992E7B84ABE50AB55DC3D7853/Scope/=C3001E7C0DA78E4487072B7E050D86C5/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2F26D8C992E7B84ABE50AB55DC3D7853/Scope/=C3001E7C0DA78E4487072B7E050D86C5/Type/@EntryValue">InCSharpFile</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2F26D8C992E7B84ABE50AB55DC3D7853/Scope/=C3001E7C0DA78E4487072B7E050D86C5/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">2.0</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=613770D1615E3B4EA3DB6E24A6C2B3A1/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=613770D1615E3B4EA3DB6E24A6C2B3A1/Applicability/=File/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=613770D1615E3B4EA3DB6E24A6C2B3A1/CustomProperties/=Extension/@EntryIndexedValue">cs</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=613770D1615E3B4EA3DB6E24A6C2B3A1/CustomProperties/=FileName/@EntryIndexedValue">BotDialog</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=613770D1615E3B4EA3DB6E24A6C2B3A1/CustomProperties/=ValidateFileName/@EntryIndexedValue">False</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=613770D1615E3B4EA3DB6E24A6C2B3A1/Description/@EntryValue">Bot Dialog</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=613770D1615E3B4EA3DB6E24A6C2B3A1/Field/=DialogDescription/@KeyIndexDefined">True</s:Boolean>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=613770D1615E3B4EA3DB6E24A6C2B3A1/Field/=DialogDescription/Order/@EntryValue">1</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=613770D1615E3B4EA3DB6E24A6C2B3A1/Field/=DialogId/@KeyIndexDefined">True</s:Boolean>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=613770D1615E3B4EA3DB6E24A6C2B3A1/Field/=DialogId/Order/@EntryValue">2</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=613770D1615E3B4EA3DB6E24A6C2B3A1/Field/=DialogName/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=613770D1615E3B4EA3DB6E24A6C2B3A1/Field/=DialogName/Expression/@EntryValue">getFileNameWithoutExtension()</s:String>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=613770D1615E3B4EA3DB6E24A6C2B3A1/Field/=DialogName/Order/@EntryValue">0</s:Int64>
+	
+	
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=613770D1615E3B4EA3DB6E24A6C2B3A1/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=613770D1615E3B4EA3DB6E24A6C2B3A1/Scope/=139FF4CE89E7094686FDA7BF5FFBBE92/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=613770D1615E3B4EA3DB6E24A6C2B3A1/Scope/=139FF4CE89E7094686FDA7BF5FFBBE92/Type/@EntryValue">Everywhere</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=613770D1615E3B4EA3DB6E24A6C2B3A1/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=613770D1615E3B4EA3DB6E24A6C2B3A1/Text/@EntryValue">using System.Threading;&#xD;
+using System.Threading.Tasks;&#xD;
+using ChatBot.Base;&#xD;
+using ChatBot.Business.Main.Models;&#xD;
+using ChatBot.Constants;&#xD;
+using ChatBot.Extensions;&#xD;
+using ChatBot.Helpers;&#xD;
+using ChatBot.Properties;&#xD;
+using ChatBot.State;&#xD;
+using Microsoft.Bot.Builder.Dialogs;&#xD;
+using Microsoft.Extensions.Configuration;&#xD;
+using Microsoft.Extensions.Logging;&#xD;
+&#xD;
+namespace ChatBot.Dialogs&#xD;
+{&#xD;
+    /// &lt;summary&gt;&#xD;
+    /// $DialogDescription$.&#xD;
+    /// Implements the &lt;see cref="CustomComponentDialog" /&gt;&#xD;
+    /// &lt;/summary&gt;&#xD;
+    /// &lt;seealso cref="$DialogName$" /&gt;&#xD;
+    public class $DialogName$ : CustomComponentDialog&#xD;
+    {&#xD;
+        /// &lt;summary&gt;&#xD;
+        /// Initializes a new instance of the &lt;see cref="$DialogName$"/&gt; class.&#xD;
+        /// &lt;/summary&gt;&#xD;
+        /// &lt;param name="configuration"&gt;The configuration.&lt;/param&gt;&#xD;
+        /// &lt;param name="logger"&gt;The logger.&lt;/param&gt;&#xD;
+        /// &lt;param name="activityHelpers"&gt;The activity helpers.&lt;/param&gt;&#xD;
+        /// &lt;param name="accessors"&gt;The accessors.&lt;/param&gt;&#xD;
+        public $DialogName$(IConfiguration configuration, ILogger&lt;DownloadDialog&gt; logger, HelperService activityHelpers, MultiTurnPromptsBotAccessors accessors) &#xD;
+            : base(DialogNames.$DialogId$, accessors, configuration, activityHelpers, logger)&#xD;
+        {&#xD;
+            AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]&#xD;
+            {&#xD;
+            }));&#xD;
+&#xD;
+            // The initial child Dialog to run.&#xD;
+            InitialDialogId = nameof(WaterfallDialog);&#xD;
+        }&#xD;
+    }&#xD;
+}</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8DCFA282D7325D47AC957AB2367C2C26/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8DCFA282D7325D47AC957AB2367C2C26/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8DCFA282D7325D47AC957AB2367C2C26/Description/@EntryValue">Show a prompt with Enum options</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8DCFA282D7325D47AC957AB2367C2C26/Field/=messagae/@KeyIndexDefined">True</s:Boolean>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8DCFA282D7325D47AC957AB2367C2C26/Field/=messagae/Order/@EntryValue">1</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8DCFA282D7325D47AC957AB2367C2C26/Field/=type/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8DCFA282D7325D47AC957AB2367C2C26/Field/=type/Expression/@EntryValue">guessExpectedType("")</s:String>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8DCFA282D7325D47AC957AB2367C2C26/Field/=type/Order/@EntryValue">0</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8DCFA282D7325D47AC957AB2367C2C26/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8DCFA282D7325D47AC957AB2367C2C26/Scope/=C3001E7C0DA78E4487072B7E050D86C5/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8DCFA282D7325D47AC957AB2367C2C26/Scope/=C3001E7C0DA78E4487072B7E050D86C5/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">2.0</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8DCFA282D7325D47AC957AB2367C2C26/Scope/=C3001E7C0DA78E4487072B7E050D86C5/Type/@EntryValue">InCSharpFile</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8DCFA282D7325D47AC957AB2367C2C26/Shortcut/@EntryValue">botprompt</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8DCFA282D7325D47AC957AB2367C2C26/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8DCFA282D7325D47AC957AB2367C2C26/Text/@EntryValue">await stepContext.PromptAsync(ChoicePromptDialog, ActivityHelpers.GetChoicesFromEnum&lt;$type$&gt;(Resources.$messagae$, null), cancellationToken);</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=977A9C5044A89A40B9FF3C2F04A9DD02/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=977A9C5044A89A40B9FF3C2F04A9DD02/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=977A9C5044A89A40B9FF3C2F04A9DD02/Description/@EntryValue">Gets the user profile</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=977A9C5044A89A40B9FF3C2F04A9DD02/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=977A9C5044A89A40B9FF3C2F04A9DD02/Scope/=C3001E7C0DA78E4487072B7E050D86C5/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=977A9C5044A89A40B9FF3C2F04A9DD02/Scope/=C3001E7C0DA78E4487072B7E050D86C5/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">2.0</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=977A9C5044A89A40B9FF3C2F04A9DD02/Scope/=C3001E7C0DA78E4487072B7E050D86C5/Type/@EntryValue">InCSharpFile</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=977A9C5044A89A40B9FF3C2F04A9DD02/Shortcut/@EntryValue">botprofile</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=977A9C5044A89A40B9FF3C2F04A9DD02/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=977A9C5044A89A40B9FF3C2F04A9DD02/Text/@EntryValue">var userProfile = await Accessors.UserProfile.GetAsync(stepContext.Context, () =&gt; new UserProfile(), cancellationToken);</s:String></wpf:ResourceDictionary>

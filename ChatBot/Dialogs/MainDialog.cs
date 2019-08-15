@@ -1,6 +1,9 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
+using ChatBot.Base;
 using ChatBot.Business.Main.Models;
+using ChatBot.Constants;
 using ChatBot.Extensions;
 using ChatBot.Helpers;
 using ChatBot.Properties;
@@ -20,10 +23,6 @@ namespace ChatBot.Dialogs
     /// <seealso cref="ComponentDialog" />
     public class MainDialog : CustomComponentDialog
     {
-        protected readonly IConfiguration Configuration;
-        protected readonly ILogger Logger;
-        protected readonly HelperService ActivityHelpers;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="MainDialog" /> class.
         /// </summary>
@@ -31,19 +30,17 @@ namespace ChatBot.Dialogs
         /// <param name="logger">The logger.</param>
         /// <param name="activityHelpers">The activity helpers.</param>
         /// <param name="accessors">The accessors.</param>
-        public MainDialog(IConfiguration configuration, ILogger<MainDialog> logger, HelperService activityHelpers, MultiTurnPromptsBotAccessors accessors) : base(nameof(MainDialog), accessors)
+        /// <param name="downloadDialog">The download dialog.</param>
+        public MainDialog(IConfiguration configuration, ILogger<MainDialog> logger, HelperService activityHelpers, MultiTurnPromptsBotAccessors accessors, DownloadDialog downloadDialog) 
+            : base(DialogNames.MainDialog, accessors, configuration, activityHelpers, logger)
         {
-            Configuration = configuration;
-            Logger = logger;
-            ActivityHelpers = activityHelpers;
+            AddDialog(downloadDialog);
 
-            AddDialog(new TextPrompt(nameof(TextPrompt)));
-            AddDialog(new ChoicePrompt(nameof(ChoicePrompt)));
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
                 RunInitialStepAsync,
                 HandleInitialStepAsnc,
-                HandleSecondStepAsync
+                FinalStepAsync
             }));
 
             // The initial child Dialog to run.
@@ -58,7 +55,7 @@ namespace ChatBot.Dialogs
         /// <returns>Task&lt;DialogTurnResult&gt;.</returns>
         private async Task<DialogTurnResult> RunInitialStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            return await stepContext.PromptAsync(nameof(ChoicePrompt), ActivityHelpers.GetChoicesFromEnum<InitialOptions>(Resources.MainDialog_InitalStep_Message, null), cancellationToken);
+            return await stepContext.PromptAsync(ChoicePromptDialog, ActivityHelpers.GetChoicesFromEnum<InitialOptions>(Resources.MainDialog_InitalStep_Message, null), cancellationToken);
         }
 
         /// <summary>
@@ -72,18 +69,27 @@ namespace ChatBot.Dialogs
             // Get the current profile object from user state.
             var userProfile = await Accessors.UserProfile.GetAsync(stepContext.Context, () => new UserProfile(), cancellationToken);
 
-            var initialOption = stepContext.GetEnumValueFromChoice<InitialOptions>();
-            userProfile.MainAction = initialOption;
+            userProfile.MainAction = stepContext.GetEnumValueFromChoice<InitialOptions>(); ;
 
-            return await stepContext.PromptAsync(nameof(TextPrompt), new PromptOptions { Prompt = MessageFactory.Text("What can I help you with today?\nSay something like \"Book a flight from Paris to Berlin on March 22, 2020\"") }, cancellationToken);
+            switch (userProfile.MainAction)
+            {
+                case InitialOptions.DownloadSomething:
+                    return await stepContext.BeginDialogAsync(DialogNames.DownloadDialog, null, cancellationToken);
+                default:
+                    return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
+            }
         }
 
-        private async Task<DialogTurnResult> HandleSecondStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        /// <summary>
+        /// Shows the final thank you message and ends the chat.
+        /// </summary>
+        /// <param name="stepContext">The step context.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>Task&lt;DialogTurnResult&gt;.</returns>
+        private async Task<DialogTurnResult> FinalStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            // Get the current profile object from user state.
-            var userProfile = await Accessors.UserProfile.GetAsync(stepContext.Context, () => new UserProfile(), cancellationToken);
-
-            return await stepContext.PromptAsync(nameof(TextPrompt), new PromptOptions { Prompt = MessageFactory.Text("test") }, cancellationToken);
+            await stepContext.Context.SendActivityAsync(MessageFactory.Text(Resources.MainDialog_FinalStep_Message), cancellationToken);
+            return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
         }
     }
 }

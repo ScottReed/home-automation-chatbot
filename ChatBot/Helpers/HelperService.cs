@@ -68,13 +68,14 @@ namespace ChatBot.Helpers
                 Choices = enumDictionary.Select(val =>
                     new Choice
                     {
-                        Value  = val.Key,
+                        Value  = val.Value,
                         Action = 
                             new CardAction
                             {
                                 Title = val.Value,
-                                Type = ActionTypes.PostBack,
-                                Value = val.Key
+                                Type = ActionTypes.ImBack,
+                                Text = val.Value,
+                                Value = val.Value
                             },
                         Synonyms = null
                     }).ToList(),

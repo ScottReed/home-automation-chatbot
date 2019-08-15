@@ -8,5 +8,9 @@ namespace ChatBot.State
     public class UserProfile
     {
         public InitialOptions MainAction { get; set; }
+
+        public DownloadType DownloadType { get; set; }
+
+        public MovieDownloadModel MovieDownload { get; set; } = new MovieDownloadModel();
     }
 }

@@ -70,11 +70,47 @@ namespace ChatBot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What type of download are you looking for?.
+        /// </summary>
+        internal static string DownloadDialog_DownloadType_Message {
+            get {
+                return ResourceManager.GetString("DownloadDialog.DownloadType.Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thank you for downloading.
+        /// </summary>
+        internal static string MainDialog_FinalStep_Message {
+            get {
+                return ResourceManager.GetString("MainDialog.FinalStep.Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What would you like to do?.
         /// </summary>
         internal static string MainDialog_InitalStep_Message {
             get {
                 return ResourceManager.GetString("MainDialog.InitalStep.Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What movie are you looking for?.
+        /// </summary>
+        internal static string MovieDialog_WhatMovie_Message {
+            get {
+                return ResourceManager.GetString("MovieDialog.WhatMovie.Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What quality are you looking for?.
+        /// </summary>
+        internal static string MovieDialog_WhatQuality_Message {
+            get {
+                return ResourceManager.GetString("MovieDialog.WhatQuality.Message", resourceCulture);
             }
         }
     }

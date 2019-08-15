@@ -120,7 +120,19 @@
   <data name="AutomationChatBot.WelcomeMessage" xml:space="preserve">
     <value>Welcome to the download automater, this chat bot will help with home automation.</value>
   </data>
+  <data name="DownloadDialog.DownloadType.Message" xml:space="preserve">
+    <value>What type of download are you looking for?</value>
+  </data>
+  <data name="MainDialog.FinalStep.Message" xml:space="preserve">
+    <value>Thank you for downloading</value>
+  </data>
   <data name="MainDialog.InitalStep.Message" xml:space="preserve">
     <value>What would you like to do?</value>
+  </data>
+  <data name="MovieDialog.WhatMovie.Message" xml:space="preserve">
+    <value>What movie are you looking for?</value>
+  </data>
+  <data name="MovieDialog.WhatQuality.Message" xml:space="preserve">
+    <value>What quality are you looking for?</value>
   </data>
 </root>

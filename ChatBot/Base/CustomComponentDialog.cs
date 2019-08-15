@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ChatBot.Helpers;
 using ChatBot.State;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
-namespace ChatBot.Dialogs
+namespace ChatBot.Base
 {
     public class CustomComponentDialog : Dialog
     {
@@ -14,10 +17,27 @@ namespace ChatBot.Dialogs
         private DialogSet _dialogs;
 
         protected readonly MultiTurnPromptsBotAccessors Accessors;
+        protected readonly IConfiguration Configuration;
+        protected readonly HelperService ActivityHelpers;
+        protected readonly ILogger Logger;
 
-        public CustomComponentDialog(string dialogId, MultiTurnPromptsBotAccessors accessors) : base(dialogId)
+        protected const string TextPromptDialog = nameof(TextPrompt);
+        protected const string ChoicePromptDialog = nameof(ChoicePrompt);
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomComponentDialog"/> class.
+        /// </summary>
+        /// <param name="dialogId">The dialog identifier.</param>
+        /// <param name="accessors">The accessors.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="activityHelpers">The activity helpers.</param>
+        /// <exception cref="System.ArgumentNullException">dialogId</exception>
+        public CustomComponentDialog(string dialogId, MultiTurnPromptsBotAccessors accessors, IConfiguration configuration, HelperService activityHelpers, ILogger logger) : base(dialogId)
         {
             Accessors = accessors;
+            Configuration = configuration;
+            ActivityHelpers = activityHelpers;
+            Logger = logger;
 
             if (string.IsNullOrEmpty(dialogId))
             {
@@ -25,6 +45,8 @@ namespace ChatBot.Dialogs
             }
 
             _dialogs = new DialogSet(accessors.ConversationDialogState);
+            AddDialog(new TextPrompt(TextPromptDialog));
+            AddDialog(new ChoicePrompt(ChoicePromptDialog));
         }
 
         /// <summary>

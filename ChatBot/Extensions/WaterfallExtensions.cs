@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Choices;
 
@@ -14,9 +15,20 @@ namespace ChatBot.Extensions
         /// <returns>T.</returns>
         public static T GetEnumValueFromChoice<T>(this WaterfallStepContext stepContext) where T : Enum
         {
-            var result = (FoundChoice) stepContext.Result;
-            Enum.TryParse(typeof(T), result.Value, true, out var enumResult);
-            return (T) enumResult;
+            var foundChoice = (FoundChoice)stepContext.Result;
+            var values = Enum.GetValues(typeof(T)).Cast<Enum>();
+
+            foreach (var value in values)
+            {
+                var description = value.GetEnumDescription();
+
+                if (string.Equals(value.ToString(), foundChoice.Value, StringComparison.InvariantCultureIgnoreCase)  || string.Equals(description, foundChoice.Value, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return (T) value;
+                }
+            }
+
+            return default(T);
         }
     }
 }

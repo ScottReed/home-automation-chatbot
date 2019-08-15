@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using ChatBot.Base;
 using ChatBot.Extensions;
 using ChatBot.Properties;
 using Microsoft.Bot.Builder;
