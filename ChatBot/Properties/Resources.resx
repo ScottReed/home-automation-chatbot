@@ -129,6 +129,12 @@
   <data name="MainDialog.InitalStep.Message" xml:space="preserve">
     <value>What would you like to do?</value>
   </data>
+  <data name="MovieDialog.ImdbSearch.NoResults" xml:space="preserve">
+    <value>Sorry there were no results please try again</value>
+  </data>
+  <data name="MovieDialog.SelectMovie.Message" xml:space="preserve">
+    <value>Select your movie</value>
+  </data>
   <data name="MovieDialog.WhatMovie.Message" xml:space="preserve">
     <value>What movie are you looking for?</value>
   </data>

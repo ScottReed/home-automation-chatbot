@@ -8,6 +8,7 @@ using ChatBot.Bots;
 using ChatBot.Dialogs;
 using ChatBot.Helpers;
 using ChatBot.State;
+using Core.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,7 @@ using Microsoft.Bot.Connector.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using NzbLibrary;
 
 namespace ChatBot
 {
@@ -71,25 +73,8 @@ namespace ChatBot
         private void ConfigureCustomServices(IServiceCollection services)
         {
             services.AddSingleton<HelperService>();
-
-            var memoryStorage = new MemoryStorage();
-
-            // Create and register state accessors.
-            // Accessors created here are passed into the IBot-derived class on every turn.
-            services.AddSingleton(sp =>
-            {
-                // We need to grab the conversationState we added on the options in the previous step
-                var conversationState = new ConversationState(memoryStorage);
-                var userState = new UserState(memoryStorage);
-
-                // Create the custom state accessor.
-                // State accessors enable other components to read and write individual properties of state.
-                return new MultiTurnPromptsBotAccessors(conversationState, userState)
-                {
-                    ConversationDialogState = conversationState.CreateProperty<DialogState>("DialogState"),
-                    UserProfile = userState.CreateProperty<UserProfile>("UserProfile"),
-                };
-            });
+            services.AddSingleton<SettingsService>();
+            services.AddSingleton<NzbClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

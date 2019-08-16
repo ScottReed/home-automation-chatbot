@@ -97,6 +97,24 @@ namespace ChatBot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sorry there were no results please try again.
+        /// </summary>
+        internal static string MovieDialog_ImdbSearch_NoResults {
+            get {
+                return ResourceManager.GetString("MovieDialog.ImdbSearch.NoResults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select your movie.
+        /// </summary>
+        internal static string MovieDialog_SelectMovie_Message {
+            get {
+                return ResourceManager.GetString("MovieDialog.SelectMovie.Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What movie are you looking for?.
         /// </summary>
         internal static string MovieDialog_WhatMovie_Message {

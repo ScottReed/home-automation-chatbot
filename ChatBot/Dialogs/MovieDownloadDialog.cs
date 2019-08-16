@@ -1,4 +1,7 @@
-﻿using System.Threading;
+﻿using System;
+using System.Linq;
+using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using ChatBot.Base;
 using ChatBot.Business.Main.Models;
@@ -9,33 +12,51 @@ using ChatBot.Properties;
 using ChatBot.State;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using NzbLibrary;
+using TMDbLib.Client;
 
 namespace ChatBot.Dialogs
 {
     public class MovieDownloadDialog : CustomComponentDialog
     {
+        private readonly NzbClient _nzbClient;
+        private const string QualityWaterFall = "QualityWaterFall";
+        private const string TitleWaterFall = "TitleWaterfall";
+        private const string SearchWaterfall = "SearchWaterfall";
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="MovieDownloadDialog"/> class.
+        /// Initializes a new instance of the <see cref="MovieDownloadDialog" /> class.
         /// </summary>
-        /// <param name="configuration">The configuration.</param>
         /// <param name="logger">The logger.</param>
-        /// <param name="activityHelpers">The activity helpers.</param>
-        /// <param name="accessors">The accessors.</param>
-        public MovieDownloadDialog(IConfiguration configuration, ILogger<DownloadDialog> logger, HelperService activityHelpers, MultiTurnPromptsBotAccessors accessors)
-            : base(DialogNames.MovieDownload, accessors, configuration, activityHelpers, logger)
+        /// <param name="serviceProvider">The service provider.</param>
+        /// <param name="nzbClient">The client.</param>
+        public MovieDownloadDialog(ILogger<DownloadDialog> logger, IServiceProvider serviceProvider, NzbClient nzbClient) : base(DialogNames.MovieDownload, logger, serviceProvider)
         {
-            AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
+            _nzbClient = nzbClient;
+            AddDialog(new WaterfallDialog(QualityWaterFall, new WaterfallStep[]
             {
-                AskWhatFilmAsync,
-                HandleWhatFilmUserIsLookingForAsync,
                 AskWhatQualityAsync,
                 HandleWhatQualityAsync
             }));
 
+            AddDialog(new WaterfallDialog(TitleWaterFall, new WaterfallStep[]
+            {
+                AskWhatFilmAsync,
+                HandleWhatFilmUserIsLookingForAsync
+            }));
+
+            AddDialog(new WaterfallDialog(SearchWaterfall, new WaterfallStep[]
+            {
+                HandleMovieSearch,
+                GetNzbs,
+                FtpNzb
+            }));
+
             // The initial child Dialog to run.
-            InitialDialogId = nameof(WaterfallDialog);
+            InitialDialogId = TitleWaterFall;
         }
 
         /// <summary>
@@ -57,10 +78,17 @@ namespace ChatBot.Dialogs
         /// <returns>Task&lt;DialogTurnResult&gt;.</returns>
         private async Task<DialogTurnResult> HandleWhatFilmUserIsLookingForAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            var userProfile = await Accessors.UserProfile.GetAsync(stepContext.Context, () => new UserProfile(), cancellationToken);
+            var userProfile = await Accessors.GetAsync(stepContext.Context, () => new UserProfile(), cancellationToken);
             userProfile.MovieDownload.Title = stepContext.Result.ToString();
 
-            return await stepContext.NextAsync(cancellationToken: cancellationToken);
+            if (userProfile.MovieDownload.QualitySet)
+            {
+                return await stepContext.ReplaceDialogAsync(SearchWaterfall, cancellationToken: cancellationToken);
+            }
+            else
+            {
+                return await stepContext.ReplaceDialogAsync(QualityWaterFall, cancellationToken: cancellationToken);
+            }
         }
 
         /// <summary>
@@ -74,13 +102,134 @@ namespace ChatBot.Dialogs
             return await stepContext.PromptAsync(ChoicePromptDialog, ActivityHelpers.GetChoicesFromEnum<MovieQuality>(Resources.MovieDialog_WhatQuality_Message, null), cancellationToken);;
         }
 
+        /// <summary>
+        /// handle what quality as an asynchronous operation.
+        /// </summary>
+        /// <param name="stepContext">The step context.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>Task&lt;DialogTurnResult&gt;.</returns>
         private async Task<DialogTurnResult> HandleWhatQualityAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            var userProfile = await Accessors.UserProfile.GetAsync(stepContext.Context, () => new UserProfile(), cancellationToken);
+            var userProfile = await Accessors.GetAsync(stepContext.Context, () => new UserProfile(), cancellationToken);
 
             userProfile.MovieDownload.Quality = stepContext.GetEnumValueFromChoice<MovieQuality>();
+            userProfile.MovieDownload.QualitySet = true;
 
-            return await stepContext.NextAsync(cancellationToken: cancellationToken);
+            return await stepContext.ReplaceDialogAsync(SearchWaterfall, cancellationToken: cancellationToken);
+        }
+
+        /// <summary>
+        /// Handles movie searches.
+        /// </summary>
+        /// <param name="stepContext">The step context.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>Task&lt;DialogTurnResult&gt;.</returns>
+        private async Task<DialogTurnResult> HandleMovieSearch(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        {
+            var userProfile = await Accessors.GetAsync(stepContext.Context, () => new UserProfile(), cancellationToken);
+
+            var client = new TMDbClient(Settings.ApiSettings.MovieDatabaseApiKey);
+            var result = await client.SearchMovieAsync(userProfile.MovieDownload.Title, cancellationToken: cancellationToken);
+
+            if (result.TotalResults == 0)
+            {
+                var noResultsActivity = MessageFactory.Text(Resources.MovieDialog_ImdbSearch_NoResults);
+
+                await stepContext.Context.SendActivityAsync(noResultsActivity, cancellationToken);
+                return await stepContext.ReplaceDialogAsync(TitleWaterFall, cancellationToken: cancellationToken);
+            }
+            else
+            {
+                var options = result.Results.Select(resultItem => 
+                    new AttachmentOption
+                    {
+                        ImageUrl = ActivityHelpers.FormatTmdbPosterPath(resultItem.PosterPath),
+                        Id = resultItem.Id.ToString(),
+                        Title = resultItem.Title
+                    });
+
+                var activity = ActivityHelpers.GetCardChoicesFromOptions(Resources.MovieDialog_SelectMovie_Message, options, AttachmentLayoutTypes.Carousel, true);
+                return await stepContext.PromptAsync(ChoicePromptDialog, new PromptOptions { Prompt = activity}, cancellationToken);
+            }                
+        }
+
+        /// <summary>
+        /// Gets the Nnb files.
+        /// </summary>
+        /// <param name="stepContext">The step context.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>Task&lt;DialogTurnResult&gt;.</returns>
+        private async Task<DialogTurnResult> GetNzbs(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        {
+            var userProfile = await Accessors.GetAsync(stepContext.Context, () => new UserProfile(), cancellationToken);
+            var tvdbId = stepContext.Result.ToString();
+
+            var searchId = int.Parse(tvdbId);
+            var imdbId = await GetMovieImdbId(searchId);
+            var rawImdbId = imdbId.Replace("tt", string.Empty);
+            var result = await _nzbClient.SearchForMovieAsync(rawImdbId);
+
+            var stringFilter = userProfile.MovieDownload.Quality == MovieQuality.Quality720P ? "720p" : "1080p";
+            var movies = result.Channel.Items.Where(m => m.Title.Contains(stringFilter)).ToList();
+
+            if (movies.Count == 0)
+            {
+                var noResultsActivity = MessageFactory.Text(Resources.MovieDialog_ImdbSearch_NoResults);
+
+                await stepContext.Context.SendActivityAsync(noResultsActivity, cancellationToken);
+                return await stepContext.ReplaceDialogAsync(TitleWaterFall, cancellationToken: cancellationToken);
+            }
+            else
+            {
+                var options = movies.Select(resultItem =>
+                    new AttachmentOption
+                    {
+                        Id = resultItem.Link,
+                        Title = resultItem.Title
+                    });
+
+                var activity = ActivityHelpers.GetCardChoicesFromOptions(Resources.MovieDialog_SelectMovie_Message, options, AttachmentLayoutTypes.List, false);
+                return await stepContext.PromptAsync(ChoicePromptDialog, new PromptOptions { Prompt = activity }, cancellationToken);                
+            }
+        }
+
+        /// <summary>
+        /// FTPs the NZB.
+        /// </summary>
+        /// <param name="stepContext">The step context.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>Task&lt;DialogTurnResult&gt;.</returns>
+        private async Task<DialogTurnResult> FtpNzb(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        {
+            var link = stepContext.Result.ToString();
+            var bytes = await GetNzb(link);
+            await ActivityHelpers.FtpBytes(bytes, link);
+            return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
+        }
+
+        /// <summary>
+        /// Gets the NZB.
+        /// </summary>
+        /// <param name="link">The link.</param>
+        /// <returns>Task&lt;System.Byte[]&gt;.</returns>
+        private async Task<byte[]> GetNzb(string link)
+        {
+            using (var client = new WebClient())
+            {
+                return await client.DownloadDataTaskAsync(link);
+            }
+        }
+
+        /// <summary>
+        /// Gets the movie imdb identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>Task&lt;System.String&gt;.</returns>
+        private async Task<string> GetMovieImdbId(int id)
+        {
+            var client = new TMDbClient(Settings.ApiSettings.MovieDatabaseApiKey);
+            var result = await client.GetMovieExternalIdsAsync(id);
+            return result.ImdbId;
         }
     }
 }

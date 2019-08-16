@@ -7,5 +7,7 @@ namespace ChatBot.State
         public string Title { get; set; }
 
         public MovieQuality Quality { get; set; }
+
+        public bool QualitySet { get; set; }
     }
 }

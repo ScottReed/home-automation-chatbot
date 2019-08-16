@@ -26,13 +26,10 @@ namespace ChatBot.Dialogs
         /// <summary>
         /// Initializes a new instance of the <see cref="MainDialog" /> class.
         /// </summary>
-        /// <param name="configuration">The configuration.</param>
         /// <param name="logger">The logger.</param>
-        /// <param name="activityHelpers">The activity helpers.</param>
-        /// <param name="accessors">The accessors.</param>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <param name="downloadDialog">The download dialog.</param>
-        public MainDialog(IConfiguration configuration, ILogger<MainDialog> logger, HelperService activityHelpers, MultiTurnPromptsBotAccessors accessors, DownloadDialog downloadDialog) 
-            : base(DialogNames.MainDialog, accessors, configuration, activityHelpers, logger)
+        public MainDialog(ILogger<MainDialog> logger, IServiceProvider serviceProvider, DownloadDialog downloadDialog) : base(DialogNames.MainDialog, logger, serviceProvider)
         {
             AddDialog(downloadDialog);
 
@@ -67,7 +64,7 @@ namespace ChatBot.Dialogs
         private async Task<DialogTurnResult> HandleInitialStepAsnc(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
             // Get the current profile object from user state.
-            var userProfile = await Accessors.UserProfile.GetAsync(stepContext.Context, () => new UserProfile(), cancellationToken);
+            var userProfile = await Accessors.GetAsync(stepContext.Context, () => new UserProfile(), cancellationToken);
 
             userProfile.MainAction = stepContext.GetEnumValueFromChoice<InitialOptions>(); ;
 

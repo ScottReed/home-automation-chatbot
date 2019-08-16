@@ -35,17 +35,10 @@
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=613770D1615E3B4EA3DB6E24A6C2B3A1/Scope/=139FF4CE89E7094686FDA7BF5FFBBE92/@KeyIndexDefined">True</s:Boolean>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=613770D1615E3B4EA3DB6E24A6C2B3A1/Scope/=139FF4CE89E7094686FDA7BF5FFBBE92/Type/@EntryValue">Everywhere</s:String>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=613770D1615E3B4EA3DB6E24A6C2B3A1/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
-	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=613770D1615E3B4EA3DB6E24A6C2B3A1/Text/@EntryValue">using System.Threading;&#xD;
-using System.Threading.Tasks;&#xD;
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=613770D1615E3B4EA3DB6E24A6C2B3A1/Text/@EntryValue">using System;&#xD;
 using ChatBot.Base;&#xD;
-using ChatBot.Business.Main.Models;&#xD;
 using ChatBot.Constants;&#xD;
-using ChatBot.Extensions;&#xD;
-using ChatBot.Helpers;&#xD;
-using ChatBot.Properties;&#xD;
-using ChatBot.State;&#xD;
 using Microsoft.Bot.Builder.Dialogs;&#xD;
-using Microsoft.Extensions.Configuration;&#xD;
 using Microsoft.Extensions.Logging;&#xD;
 &#xD;
 namespace ChatBot.Dialogs&#xD;
@@ -60,12 +53,9 @@ namespace ChatBot.Dialogs&#xD;
         /// &lt;summary&gt;&#xD;
         /// Initializes a new instance of the &lt;see cref="$DialogName$"/&gt; class.&#xD;
         /// &lt;/summary&gt;&#xD;
-        /// &lt;param name="configuration"&gt;The configuration.&lt;/param&gt;&#xD;
         /// &lt;param name="logger"&gt;The logger.&lt;/param&gt;&#xD;
-        /// &lt;param name="activityHelpers"&gt;The activity helpers.&lt;/param&gt;&#xD;
-        /// &lt;param name="accessors"&gt;The accessors.&lt;/param&gt;&#xD;
-        public $DialogName$(IConfiguration configuration, ILogger&lt;DownloadDialog&gt; logger, HelperService activityHelpers, MultiTurnPromptsBotAccessors accessors) &#xD;
-            : base(DialogNames.$DialogId$, accessors, configuration, activityHelpers, logger)&#xD;
+        /// &lt;param name="serviceProvider"&gt;The service provider.&lt;/param&gt;&#xD;
+        public $DialogName$(ILogger&lt;DownloadDialog&gt; logger, IServiceProvider serviceProvider) : base(DialogNames.$DialogId$, logger, serviceProvider)&#xD;
         {&#xD;
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]&#xD;
             {&#xD;

@@ -24,14 +24,11 @@ namespace ChatBot.Dialogs
         /// <summary>
         /// Initializes a new instance of the <see cref="DownloadDialog" /> class.
         /// </summary>
-        /// <param name="configuration">The configuration.</param>
         /// <param name="logger">The logger.</param>
-        /// <param name="activityHelpers">The activity helpers.</param>
-        /// <param name="accessors">The accessors.</param>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <param name="movieDownloadDialog">The movie download dialog.</param>
         /// <param name="tvDownloadDialog">The tv download dialog.</param>
-        public DownloadDialog(IConfiguration configuration, ILogger<DownloadDialog> logger, HelperService activityHelpers, MultiTurnPromptsBotAccessors accessors, MovieDownloadDialog movieDownloadDialog, TvDownloadDialog tvDownloadDialog) 
-            : base(DialogNames.DownloadDialog, accessors, configuration, activityHelpers, logger)
+        public DownloadDialog(ILogger<DownloadDialog> logger, IServiceProvider serviceProvider, MovieDownloadDialog movieDownloadDialog, TvDownloadDialog tvDownloadDialog) : base(DialogNames.DownloadDialog, logger, serviceProvider)
         {
             AddDialog(movieDownloadDialog);
             AddDialog(tvDownloadDialog);
@@ -39,8 +36,7 @@ namespace ChatBot.Dialogs
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
                 AskDownloadTypeAsync,
-                HandleDownloadTypeAsync,
-
+                HandleDownloadTypeAsync
             }));
 
             // The initial child Dialog to run.
@@ -67,7 +63,7 @@ namespace ChatBot.Dialogs
         private async Task<DialogTurnResult> HandleDownloadTypeAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
             // Get the current profile object from user state.
-            var userProfile = await Accessors.UserProfile.GetAsync(stepContext.Context, () => new UserProfile(), cancellationToken);
+            var userProfile = await Accessors.GetAsync(stepContext.Context, () => new UserProfile(), cancellationToken);
             userProfile.DownloadType = stepContext.GetEnumValueFromChoice<DownloadType>();
 
             switch (userProfile.DownloadType)
