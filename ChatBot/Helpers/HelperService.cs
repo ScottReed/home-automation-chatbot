@@ -121,9 +121,9 @@ namespace ChatBot.Helpers
 
                 CardAction plButton = new CardAction()
                 {
-                    Value = listItem.Id,
+                    Value = listItem.Title,
                     Title = listItem.Title,
-                    Type = ActionTypes.MessageBack
+                    Type = ActionTypes.ImBack
                 };
 
                 cardButtons.Add(plButton);
@@ -177,7 +177,7 @@ namespace ChatBot.Helpers
                 request.Method = WebRequestMethods.Ftp.UploadFile;
 
                 // Get network credentials.
-                request.Credentials = new NetworkCredential(_settingsService.FtpSettings.Password, _settingsService.FtpSettings.Password);
+                request.Credentials = new NetworkCredential(_settingsService.FtpSettings.Username, _settingsService.FtpSettings.Password);
 
                 // Write the bytes into the request stream.
                 request.ContentLength = bytes.Length;

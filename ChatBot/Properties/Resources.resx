@@ -124,7 +124,7 @@
     <value>What type of download are you looking for?</value>
   </data>
   <data name="MainDialog.FinalStep.Message" xml:space="preserve">
-    <value>Thank you for downloading</value>
+    <value>Thank you for using this bot</value>
   </data>
   <data name="MainDialog.InitalStep.Message" xml:space="preserve">
     <value>What would you like to do?</value>

@@ -6,13 +6,13 @@
         /// Gets or sets the identifier.
         /// </summary>
         /// <value>The identifier.</value>
-        public string Id { get; set; }
+        public string Title { get; set; }
 
         /// <summary>
-        /// Gets or sets the title.
+        /// Gets or sets the value.
         /// </summary>
-        /// <value>The title.</value>
-        public string Title { get; set; }
+        /// <value>The value.</value>
+        public string Value { get; set; }
 
         /// <summary>
         /// Gets or sets the image URL.

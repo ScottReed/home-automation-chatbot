@@ -79,7 +79,7 @@ namespace ChatBot.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thank you for downloading.
+        ///   Looks up a localized string similar to Thank you for using this bot.
         /// </summary>
         internal static string MainDialog_FinalStep_Message {
             get {

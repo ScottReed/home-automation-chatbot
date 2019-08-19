@@ -12,6 +12,7 @@ using ChatBot.Properties;
 using ChatBot.State;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.Dialogs.Choices;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -99,7 +100,7 @@ namespace ChatBot.Dialogs
         /// <returns>Task&lt;DialogTurnResult&gt;.</returns>
         private async Task<DialogTurnResult> AskWhatQualityAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            return await stepContext.PromptAsync(ChoicePromptDialog, ActivityHelpers.GetChoicesFromEnum<MovieQuality>(Resources.MovieDialog_WhatQuality_Message, null), cancellationToken);;
+            return await stepContext.PromptAsync(ChoicePromptDialog, ActivityHelpers.GetChoicesFromEnum<MovieQuality>(Resources.MovieDialog_WhatQuality_Message, null), cancellationToken);
         }
 
         /// <summary>
@@ -144,12 +145,17 @@ namespace ChatBot.Dialogs
                     new AttachmentOption
                     {
                         ImageUrl = ActivityHelpers.FormatTmdbPosterPath(resultItem.PosterPath),
-                        Id = resultItem.Id.ToString(),
+                        Value = resultItem.Id.ToString(),
                         Title = resultItem.Title
-                    });
+                    }).ToList();
+
+                userProfile.MovieDownload.SearchOptions = options;
 
                 var activity = ActivityHelpers.GetCardChoicesFromOptions(Resources.MovieDialog_SelectMovie_Message, options, AttachmentLayoutTypes.Carousel, true);
-                return await stepContext.PromptAsync(ChoicePromptDialog, new PromptOptions { Prompt = activity}, cancellationToken);
+                return await stepContext.PromptAsync(TextPromptDialog, new PromptOptions
+                {
+                    Prompt = activity
+                }, cancellationToken);
             }                
         }
 
@@ -162,7 +168,8 @@ namespace ChatBot.Dialogs
         private async Task<DialogTurnResult> GetNzbs(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
             var userProfile = await Accessors.GetAsync(stepContext.Context, () => new UserProfile(), cancellationToken);
-            var tvdbId = stepContext.Result.ToString();
+            var stringResult = stepContext.Result.ToString();
+            var tvdbId = userProfile.MovieDownload.SearchOptions.FirstOrDefault(sr => sr.Title == stringResult).Value;
 
             var searchId = int.Parse(tvdbId);
             var imdbId = await GetMovieImdbId(searchId);
@@ -184,12 +191,14 @@ namespace ChatBot.Dialogs
                 var options = movies.Select(resultItem =>
                     new AttachmentOption
                     {
-                        Id = resultItem.Link,
+                        Value = resultItem.Link,
                         Title = resultItem.Title
-                    });
+                    }).ToList();
+
+                userProfile.MovieDownload.NzbOptions = options;
 
                 var activity = ActivityHelpers.GetCardChoicesFromOptions(Resources.MovieDialog_SelectMovie_Message, options, AttachmentLayoutTypes.List, false);
-                return await stepContext.PromptAsync(ChoicePromptDialog, new PromptOptions { Prompt = activity }, cancellationToken);                
+                return await stepContext.PromptAsync(TextPromptDialog, new PromptOptions { Prompt = activity }, cancellationToken);
             }
         }
 
@@ -201,9 +210,15 @@ namespace ChatBot.Dialogs
         /// <returns>Task&lt;DialogTurnResult&gt;.</returns>
         private async Task<DialogTurnResult> FtpNzb(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            var link = stepContext.Result.ToString();
-            var bytes = await GetNzb(link);
-            await ActivityHelpers.FtpBytes(bytes, link);
+            var userProfile = await Accessors.GetAsync(stepContext.Context, () => new UserProfile(), cancellationToken);
+            var stringResult = stepContext.Result.ToString();
+
+            var item = userProfile.MovieDownload.NzbOptions.FirstOrDefault(r => r.Title == stringResult);
+            var bytes = await GetNzb(item.Value);
+            await ActivityHelpers.FtpBytes(bytes, item.Title);
+
+            userProfile.MovieDownload.QualitySet = false;
+
             return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
         }
 

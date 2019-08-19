@@ -1,4 +1,6 @@
-﻿using ChatBot.Business.Main.Models;
+﻿using System.Collections.Generic;
+using ChatBot.Business.Main.Models;
+using ChatBot.Helpers;
 
 namespace ChatBot.State
 {

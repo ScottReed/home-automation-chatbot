@@ -86,7 +86,7 @@ namespace ChatBot.Dialogs
         private async Task<DialogTurnResult> FinalStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
             await stepContext.Context.SendActivityAsync(MessageFactory.Text(Resources.MainDialog_FinalStep_Message), cancellationToken);
-            return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
+            return await stepContext.ReplaceDialogAsync(nameof(WaterfallDialog), cancellationToken: cancellationToken);
         }
     }
 }
