@@ -1,4 +1,4 @@
-﻿namespace ChatBot.Helpers
+﻿namespace Core.Helpers
 {
     public class AttachmentOption
     {

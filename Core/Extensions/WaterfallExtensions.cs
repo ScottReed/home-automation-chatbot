@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Choices;
 
-namespace ChatBot.Extensions
+namespace Core.Extensions
 {
     public static class WaterfallExtensions
     {

@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using ChatBot.Base;
 using ChatBot.Business.Main.Models;
 using ChatBot.Constants;
-using ChatBot.Extensions;
-using ChatBot.Helpers;
 using ChatBot.Properties;
 using ChatBot.State;
+using Core.Base;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -16,10 +14,10 @@ namespace ChatBot.Dialogs
 {
     /// <summary>
     /// Dialog for download TV shows.
-    /// Implements the <see cref="CustomComponentDialog" />
+    /// Implements the <see cref="CustomComponentDialog{UserProfile}" />
     /// </summary>
-    /// <seealso cref="TvDownloadDialog" />
-    public class TvDownloadDialog : CustomComponentDialog
+    /// <seealso cref="CustomComponentDialog{UserProfile}" />
+    public class TvDownloadDialog : CustomComponentDialog<UserProfile>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TvDownloadDialog" /> class.

@@ -1,27 +1,27 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using ChatBot.Base;
 using ChatBot.Business.Main.Models;
 using ChatBot.Constants;
-using ChatBot.Extensions;
-using ChatBot.Helpers;
 using ChatBot.Properties;
 using ChatBot.State;
+using Core.Base;
+using Core.Extensions;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Choices;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Models.State;
 
 namespace ChatBot.Dialogs
 {
     /// <summary>
     /// Application Main Dialog.
-    /// Implements the <see cref="ComponentDialog" />
+    /// Implements the <see cref="CustomComponentDialog{UserProfile}" />
     /// </summary>
-    /// <seealso cref="ComponentDialog" />
-    public class MainDialog : CustomComponentDialog
+    /// <seealso cref="CustomComponentDialog{UserProfile}" />
+    public class MainDialog : CustomComponentDialog<UserProfile>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MainDialog" /> class.

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 
-namespace ChatBot.Extensions
+namespace Core.Extensions
 {
     /// <summary>
     /// Core dialog extensions.

@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using ChatBot.Business.Main.Models;
-using ChatBot.Helpers;
+﻿using ChatBot.Business.Main.Models;
+using Models.State;
 
 namespace ChatBot.State
 {
-    /// <summary>
-    /// User profile for handling profile information.
-    /// </summary>
-    public class UserProfile
+    public class UserProfile : BaseUserProfile
     {
         public InitialOptions MainAction { get; set; }
 

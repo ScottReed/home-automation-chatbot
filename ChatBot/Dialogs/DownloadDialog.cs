@@ -1,25 +1,26 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using ChatBot.Base;
 using ChatBot.Business.Main.Models;
 using ChatBot.Constants;
-using ChatBot.Extensions;
-using ChatBot.Helpers;
 using ChatBot.Properties;
 using ChatBot.State;
+using Core.Base;
+using Core.Extensions;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Models.State;
 
 namespace ChatBot.Dialogs
 {
+
     /// <summary>
-    /// The download dialog.
-    /// Implements the <see cref="CustomComponentDialog" />
+    /// Class DownloadDialog.
+    /// Implements the <see cref="CustomComponentDialog{UserProfile}" />
     /// </summary>
-    /// <seealso cref="CustomComponentDialog" />
-    public class DownloadDialog : CustomComponentDialog
+    /// <seealso cref="CustomComponentDialog{UserProfile}" />
+    public class DownloadDialog : CustomComponentDialog<UserProfile>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DownloadDialog" /> class.

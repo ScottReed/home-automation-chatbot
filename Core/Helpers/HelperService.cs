@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using ChatBot.Dialogs;
-using ChatBot.Extensions;
+using Core.Extensions;
 using Core.Settings;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
@@ -12,7 +11,7 @@ using Microsoft.Bot.Builder.Dialogs.Choices;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
 
-namespace ChatBot.Helpers
+namespace Core.Helpers
 {
     /// <summary>
     /// Helpers for working with actions.

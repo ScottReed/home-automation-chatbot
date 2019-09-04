@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+    // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 //
 // Generated with Bot Builder V4 SDK Template for Visual Studio EmptyBot v4.5.0
@@ -6,8 +6,9 @@
 using System.Linq;
 using ChatBot.Bots;
 using ChatBot.Dialogs;
-using ChatBot.Helpers;
 using ChatBot.State;
+using Core.Adapters;
+using Core.Helpers;
 using Core.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

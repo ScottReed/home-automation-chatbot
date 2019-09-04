@@ -3,25 +3,31 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using ChatBot.Base;
 using ChatBot.Business.Main.Models;
 using ChatBot.Constants;
-using ChatBot.Extensions;
-using ChatBot.Helpers;
 using ChatBot.Properties;
 using ChatBot.State;
+using Core.Base;
+using Core.Extensions;
+using Core.Helpers;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Choices;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Models.State;
 using NzbLibrary;
 using TMDbLib.Client;
 
 namespace ChatBot.Dialogs
 {
-    public class MovieDownloadDialog : CustomComponentDialog
+    /// <summary>
+    /// Class MovieDownloadDialog.
+    /// Implements the <see cref="CustomComponentDialog{UserProfile}" />
+    /// </summary>
+    /// <seealso cref="CustomComponentDialog{UserProfile}" />
+    public class MovieDownloadDialog : CustomComponentDialog<UserProfile>
     {
         private readonly NzbClient _nzbClient;
         private const string QualityWaterFall = "QualityWaterFall";

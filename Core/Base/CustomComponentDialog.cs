@@ -1,25 +1,23 @@
 ﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using ChatBot.Helpers;
-using ChatBot.State;
+using Core.Helpers;
 using Core.Settings;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Models.State;
 
-namespace ChatBot.Base
+namespace Core.Base
 {
-    public class CustomComponentDialog : ComponentDialog
+    public class CustomComponentDialog<TProfile> : ComponentDialog where TProfile : BaseUserProfile
     {
         protected readonly IConfiguration Configuration;
         protected readonly HelperService ActivityHelpers;
         protected readonly ILogger Logger;
         protected readonly SettingsService Settings;
         protected readonly UserState UserState;
-        protected readonly IStatePropertyAccessor<UserProfile> Accessors;
+        protected readonly IStatePropertyAccessor<TProfile> Accessors;
 
         protected const string TextPromptDialog = nameof(TextPrompt);
         protected const string ChoicePromptDialog = nameof(ChoicePrompt);
@@ -39,7 +37,7 @@ namespace ChatBot.Base
             Logger = logger;
             Settings = serviceProvider.GetService<SettingsService>();
             UserState = serviceProvider.GetService<UserState>();
-            Accessors = UserState.CreateProperty<UserProfile>("UserProfile");
+            Accessors = UserState.CreateProperty<TProfile>("UserProfile");
 
             if (string.IsNullOrEmpty(dialogId))
             {
